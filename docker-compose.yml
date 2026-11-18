@@ -29,10 +29,9 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgres://${POSTGRES_USER:-ec2lab}:${POSTGRES_PASSWORD:-ec2lab_dev_password}@db:5432/${POSTGRES_DB:-ec2lab}}
       DATABASE_SSL: ${DATABASE_SSL:-false}
       REQUIRE_DB: "true"
-    # Hanya bind ke loopback host: untuk health check & debug.
-    # Internet tetap harus lewat Nginx (80/443).
+    # App tidak dibuka langsung ke LAN/internet; akses melalui Nginx.
     ports:
-      - "127.0.0.1:3000:3000"
+      - "${APP_BIND_IP:-127.0.0.1}:3000:3000"
     healthcheck:
       test:
         [
@@ -102,10 +101,12 @@ services:
         condition: service_healthy
     environment:
       DOMAIN: ${DOMAIN:-app.example.com}
+    entrypoint: ["/bin/sh", "/etc/nginx/start-nginx.sh"]
     ports:
-      - "80:80"
-      - "443:443"
+      - "${HTTP_PORT:-8083}:80"
+      - "${HTTPS_PORT:-8443}:443"
     volumes:
+      - ./nginx/start-nginx.sh:/etc/nginx/start-nginx.sh:ro
       - ./nginx/templates:/etc/nginx/templates:ro
       - ./nginx/certs:/etc/letsencrypt:ro
       - ./nginx/www:/var/www/certbot:ro

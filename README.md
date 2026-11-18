@@ -43,7 +43,8 @@ Repo ini adalah pasangan dari video *AWS EC2 Web Hosting Part 1*: launch instanc
 | Infra as Code | `terraform/` — VPC, subnet, SG, IAM SSM, EC2, Elastic IP, Route 53 |
 | Orchestrasi | `helm/nextjs-app/` + `k8s/` (Deployment, Service, Ingress, HPA, PDB) |
 | CI/CD | `.github/workflows/ci.yml`, `deploy-ec2.yml`, `deploy-k8s.yml` |
-| Dokumentasi | `docs/` — pendalaman tiap tahap, termasuk `docs/10-database.md` |
+| Dokumentasi | `docs/` - pendalaman tiap tahap, 01-14 (termasuk `docs/10-database.md`, `docs/13-aws-architecture-qanda.md`, `docs/14-nextjs-ai-production.md`) |
+| Panduan cetak | `docs/Panduan-AWS-EC2-Web-Hosting-Part-1.pdf` dan `.docx` (bahasa Indonesia) |
 
 Arsitektur target:
 
@@ -335,6 +336,8 @@ Isi minimal:
 ```dotenv
 DOMAIN=app.example.com
 NEXT_PUBLIC_SITE_URL=https://app.example.com
+HTTP_PORT=80
+HTTPS_PORT=443
 APP_IMAGE=ghcr.io/owner/repo:latest
 
 POSTGRES_DB=ec2lab
@@ -344,6 +347,12 @@ ADMIN_TOKEN=<token-acak-untuk-hapus-pesan>
 ```
 
 `OPENAI_API_KEY` opsional. Tanpa key, `/api/ai` memakai knowledge base lokal.
+
+Untuk uji dari perangkat lain di Wi-Fi yang sama, gunakan `HTTP_PORT=8083` dan
+atur `NEXT_PUBLIC_SITE_URL=http://192.168.1.20:8083` bila IP PC memang masih
+`192.168.1.20`. Buka `http://192.168.1.20:8083`. Untuk VPS dengan IP publik,
+gunakan `HTTP_PORT=80` dan `HTTPS_PORT=443`, lalu buka port itu di firewall VPS
+dan firewall provider. IP `192.168.1.20` hanya berlaku di LAN.
 
 > Password database harus **URL-safe** (huruf, angka, `-`, `_`) karena dipakai di `DATABASE_URL`. Buat dengan `openssl rand -base64 24 | tr '+/' '-_' | tr -d '='`. Jika ingin karakter khusus, set `DATABASE_URL` manual di `.env` dan pastikan sama dengan `POSTGRES_*`.
 
@@ -372,7 +381,14 @@ docker compose up -d db app
 
 > `REQUIRE_DB=true` di Compose membuat `/api/health` mengembalikan **503** saat database mati. Ini disengaja agar deploy tidak dianggap sukses kalau database tidak siap.
 
-### 3.3 Terbitkan sertifikat (butuh domain)
+### 3.3 Uji HTTP atau terbitkan sertifikat
+
+Nginx dapat melayani HTTP melalui IP sebelum sertifikat tersedia. Untuk uji LAN
+buka `http://192.168.1.20:8083`. Untuk VPS, set `HTTP_PORT=80` dan
+`HTTPS_PORT=443` di `.env`, lalu buka `http://<IP-publik>`.
+
+Untuk HTTPS, pastikan **A record** `app.example.com` sudah mengarah ke IP publik
+server dan `HTTP_PORT=80` di `.env`, lalu:
 
 Pastikan **A record** `app.example.com` sudah mengarah ke Elastic IP, lalu:
 
@@ -394,7 +410,9 @@ docker compose up -d
 docker compose ps
 ```
 
-Buka `https://app.example.com`. Cek juga:
+Buka `https://app.example.com` setelah sertifikat diterbitkan. Tanpa sertifikat,
+akses HTTP lewat IP tetap aktif dan Nginx tidak memaksa redirect HTTPS.
+Cek juga:
 
 ```bash
 curl -I https://app.example.com
@@ -726,7 +744,7 @@ aws cloudwatch put-metric-alarm \
 | --- | --- |
 | SSH timeout | SG port 22, IP berubah, instance running, EIP |
 | `permission denied (publickey)` | user salah (`admin` vs `ubuntu`), permission `.pem` 400 |
-| Nginx `[emerg] cannot load certificate` | sertifikat belum diterbitkan / `DOMAIN` di `.env` salah |
+| Nginx hanya melayani HTTP | Terbitkan sertifikat domain lalu `docker compose up -d nginx`; HTTPS diaktifkan saat cert tersedia |
 | `502 Bad Gateway` | container app mati: `docker compose ps`, `logs app` |
 | Health check CI gagal | app butuh env yang hilang, port salah, build tidak standalone |
 | `/api/health` 503, `db.status=down` | `docker compose ps db`, `logs db`, cek password/`DATABASE_URL` |
@@ -800,3 +818,8 @@ deployment, serta dokumentasi Terraform/OpenTofu yang diminta.
 - Roadmap DevOps: <https://roadmap.sh/devops>
 
 Catatan teori AWS (VPC, IAM, ECS, RDS, SQS, CloudFront, Route 53, Well-Architected) diringkas di [`docs/08-aws-architecture-notes.md`](docs/08-aws-architecture-notes.md). Detail database lokal di EC2 ada di [`docs/10-database.md`](docs/10-database.md).
+
+Materi Part 2 melengkapi Part 1:
+
+- **AWS Architecture Q&amp;A (30 pertanyaan, 6 bagian)** — VPC, IAM, ECS, RDS, server &amp; serverless, cache, antrian, Lambda, CDN, Route 53, Terraform, observability, Well-Architected: [`docs/13-aws-architecture-qanda.md`](docs/13-aws-architecture-qanda.md)
+- **Next.js + AI: dari localhost ke production AWS** — arsitektur &amp; AI hybrid (`/api/ai`), roadmap 12 tahap (GitHub → Docker → ECR → EC2 → RDS → Route 53 → ACM/Nginx HTTPS → monitoring → GitHub Actions → optimasi biaya), decision matrix, rollback otomatis, checklist production: [`docs/14-nextjs-ai-production.md`](docs/14-nextjs-ai-production.md)

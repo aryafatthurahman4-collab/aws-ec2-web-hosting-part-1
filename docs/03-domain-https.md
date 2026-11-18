@@ -17,6 +17,11 @@ nslookup app.example.com
 
 Kalau memakai Cloudflare, atur **DNS only (grey cloud)** saat pertama kali menerbitkan sertifikat agar challenge HTTP tidak ter-proxy. Setelah valid, boleh di-proxy.
 
+Di VPS, pastikan `.env` memetakan port host `HTTP_PORT=80` dan
+`HTTPS_PORT=443`, lalu buka TCP 80/443 pada firewall VPS dan firewall provider.
+Sertifikat publik hanya bisa diterbitkan untuk domain yang mengarah ke IP publik
+server. Untuk uji LAN tanpa domain, gunakan `http://192.168.1.20:8083`.
+
 ## 2. Terbitkan sertifikat
 
 ```bash
@@ -24,7 +29,7 @@ cd /opt/app
 DOMAIN=app.example.com EMAIL=kamu@email.com sudo -E bash scripts/issue-cert.sh
 ```
 
-Script memakai `certbot --standalone`, jadi nginx dihentikan sementara agar port 80 bebas.
+Script memakai `certbot --standalone`, jadi nginx dihentikan sementara agar port 80 host bebas.
 
 Sertifikat tersimpan di:
 
@@ -40,6 +45,10 @@ docker compose up -d
 docker compose exec nginx nginx -t
 curl -I https://app.example.com
 ```
+
+Jika sertifikat belum tersedia, Nginx tetap berjalan pada HTTP dan tidak
+mengalihkan akses IP ke HTTPS. Setelah sertifikat diterbitkan, jalankan ulang
+`docker compose up -d nginx` agar virtual host HTTPS dimuat.
 
 Yang benar:
 

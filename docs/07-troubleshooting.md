@@ -76,23 +76,23 @@ docker compose logs nginx
 - nama service berubah → sesuaikan `upstream`,
 - app crash karena env hilang → cek `.env`.
 
-## 6. Nginx gagal start: certificate not found
+## 6. Akses IP bekerja, tetapi HTTPS belum aktif
 
-```text
-[emerg] cannot load certificate "/etc/letsencrypt/live/app.example.com/fullchain.pem"
-```
-
-Sertifikat belum ada atau `DOMAIN` tidak cocok. Terbitkan dulu:
+Tanpa sertifikat yang cocok, Nginx hanya melayani HTTP. Untuk akses LAN gunakan
+`http://192.168.1.20:8083` bila itu IP PC saat ini. Untuk HTTPS publik, arahkan
+domain ke IP publik VPS, set `HTTP_PORT=80` dan `HTTPS_PORT=443`, lalu terbitkan
+sertifikat:
 
 ```bash
 DOMAIN=app.example.com EMAIL=kamu@email.com sudo -E bash scripts/issue-cert.sh
 ```
 
-Cek:
+Cek sertifikat dan muat ulang Nginx:
 
 ```bash
 ls -l nginx/certs/live/
-docker compose exec nginx env | grep DOMAIN
+docker compose up -d nginx
+docker compose exec nginx nginx -t
 ```
 
 ## 7. Certbot gagal

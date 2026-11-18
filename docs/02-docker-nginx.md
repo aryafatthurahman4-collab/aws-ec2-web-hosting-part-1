@@ -50,11 +50,14 @@ Tiga service utama + dua opsional lewat profile:
 | --- | --- | --- |
 | `db` | PostgreSQL 17, volume `db-data` | `127.0.0.1:5433` |
 | `app` | Next.js standalone | `127.0.0.1:3000` |
-| `nginx` | TLS + reverse proxy | `80`, `443` |
+| `nginx` | HTTP + reverse proxy; TLS saat sertifikat tersedia | `8083`, `8443` lokal; `80`, `443` di VPS |
 | `adminer` | UI database (`--profile tools`) | `127.0.0.1:8090` |
 | `certbot` | renew sertifikat (`--profile tls`) | — |
 
-App dan database hanya bind ke loopback. Artinya health check lokal tetap bisa, tapi internet tidak bisa langsung ke 3000 atau 5432.
+App dan database tidak dibuka ke LAN/internet; Nginx menjadi pintu masuk. Secara lokal,
+akses dari PC yang sama lewat `http://localhost:8083` atau perangkat satu LAN lewat
+`http://192.168.1.20:8083` jika IP PC tersebut memang `192.168.1.20`. Pada VPS,
+gunakan port host `80`/`443` dan alamat publik yang diberikan penyedia.
 
 ```bash
 cp .env.example .env
@@ -90,11 +93,14 @@ Detail lengkap: [`10-database.md`](10-database.md).
 
 ## Nginx
 
-Template `nginx/templates/default.conf.template` dirender oleh entrypoint image Nginx (`envsubst`), sehingga `DOMAIN` di `.env` otomatis dipakai.
+Template `nginx/templates/default.conf.template` dirender oleh entrypoint image Nginx (`envsubst`).
+`nginx/start-nginx.sh` menambahkan virtual host HTTPS hanya bila sertifikat untuk `DOMAIN`
+tersedia; akses HTTP via IP tetap berfungsi sebelum sertifikat diterbitkan.
 
 Fitur:
 
-- HTTP → HTTPS 301,
+- HTTP → HTTPS 301 untuk domain setelah sertifikat tersedia,
+- HTTP langsung via IP untuk uji awal dan akses LAN,
 - endpoint ACME `/.well-known/acme-challenge/`,
 - proxy ke `app:3000` lewat network Docker,
 - header keamanan (nosniff, frame, referrer, permissions, HSTS pendek),
@@ -111,18 +117,13 @@ docker compose exec nginx nginx -s reload
 
 ## Urutan start yang benar
 
-1. `docker compose up -d db app` — database healthy, lalu app sehat.
-2. Terbitkan sertifikat (`scripts/issue-cert.sh`).
-3. `docker compose up -d` — nginx + app + db.
-4. Smoke test.
+1. `docker compose up -d --build` — database, app, dan Nginx HTTP.
+2. Uji `http://localhost:8083` atau `http://192.168.1.20:8083` dari perangkat satu LAN.
+3. Untuk VPS, set `HTTP_PORT=80` dan `HTTPS_PORT=443`; arahkan domain ke IP publik VPS.
+4. Terbitkan sertifikat (`scripts/issue-cert.sh`), lalu Nginx mengaktifkan HTTPS saat start.
 
-Kalau nginx dinyalakan sebelum sertifikat ada, container akan gagal dengan:
-
-```text
-[emerg] cannot load certificate ... No such file or directory
-```
-
-Itu normal. Terbitkan sertifikat dulu.
+Tanpa sertifikat, Nginx hanya melayani HTTP. Sertifikat Let's Encrypt memerlukan
+domain publik yang mengarah ke VPS dan port 80 dapat dijangkau dari internet.
 
 ## Update & rollback
 

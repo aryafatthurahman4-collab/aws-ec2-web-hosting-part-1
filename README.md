@@ -1,3 +1,26 @@
+
+<!-- dbx-style-kit -->
+<div align="center">
+
+<img src="https://img.shields.io/badge/aws-ec2-web-hosting-part-1-1f6feb?style=for-the-badge" alt="aws-ec2-web-hosting-part-1" />
+<img src="https://img.shields.io/badge/LANG%20TypeScript-3178c6?style=for-the-badge" alt="LANG TypeScript" />
+<img src="https://img.shields.io/badge/STARS%200-eab308?style=for-the-badge" alt="STARS 0" />
+<img src="https://img.shields.io/badge/LICENSE%20MIT-22c55e?style=for-the-badge" alt="LICENSE MIT" />
+
+<br>
+
+<img src="https://img.shields.io/badge/OPEN%20SOURCE-yes-22c55e?style=for-the-badge&logo=github&logoColor=white" alt="OPEN SOURCE" />
+<img src="https://img.shields.io/badge/BUILT%20IN%20PUBLIC-true-6366f1?style=for-the-badge&logo=opensourceinitiative&logoColor=white" alt="BUILT IN PUBLIC" />
+<img src="https://img.shields.io/badge/HANDS%20ON%20LABS-52-0ea5e9?style=for-the-badge&logo=docker&logoColor=white" alt="HANDS ON LABS" />
+<img src="https://img.shields.io/badge/DOCUMENTED-yes-14b8a6?style=for-the-badge&logo=markdown&logoColor=white" alt="DOCUMENTED" />
+
+<br>
+
+<b>AWS EC2 Web Hosting Lab - Next.js 16, Tailwind, PostgreSQL, Docker, Terraform, Kubernetes/Helm.</b>
+
+</div>
+
+---
 # AWS EC2 Web Hosting — Part 1
 
 Lab lengkap: **Next.js 16 + Tailwind CSS 4** dengan **PostgreSQL 17** yang di-deploy ke **AWS EC2** memakai **Docker Compose**, **Nginx**, dan **HTTPS**, lalu diotomasi dengan **Terraform**, **Helm/Kubernetes**, dan **GitHub Actions**. Aplikasi mencakup akun login, checklist deployment per pengguna, dan guestbook yang tersimpan di PostgreSQL.

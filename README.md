@@ -828,7 +828,7 @@ Materi Part 2 melengkapi Part 1:
 
 ## Project Governance
 
-[![CI](https://github.com/aryafatthurahman4-collab/aws-ec2-web-hosting-part-1/actions/workflows/ci.yml/badge.svg)](https://github.com/aryafatthurahman4-collab/aws-ec2-web-hosting-part-1/actions/workflows/ci.yml)
+[![CI](https://github.com/devarent/aws-ec2-web-hosting-part-1/actions/workflows/ci.yml/badge.svg)](https://github.com/devarent/aws-ec2-web-hosting-part-1/actions/workflows/ci.yml)
 
 [Contributing](CONTRIBUTING.md) | [Security Policy](SECURITY.md) | [Code of Conduct](CODE_OF_CONDUCT.md)
 

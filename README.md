@@ -1,4 +1,38 @@
 
+<!-- identity-block -->
+<div align="center">
+
+# aws-ec2-web-hosting-part-1
+
+<sub>AWS EC2 Web Hosting Lab - Next.js 16, Tailwind, PostgreSQL, Docker, Terraform, Kubernetes/Helm.</sub>
+
+</div>
+
+## At a glance
+
+| Field | Detail |
+| --- | --- |
+| Repository | aws-ec2-web-hosting-part-1 |
+| Primary language | TypeScript |
+| Topics | aws, devops, docker, ec2, kubernetes, nextjs, nodejs, postgresql, tailwindcss, terraform, typescript |
+| License | MIT |
+| Branch | main |
+| Maintainer | [@devarent](https://github.com/devarent) |
+
+## Overview
+
+aws-ec2-web-hosting-part-1 is a hands-on repository focused on: AWS EC2 Web Hosting Lab - Next.js 16, Tailwind, PostgreSQL, Docker, Terraform, Kubernetes/Helm.. Primary language: TypeScript. Topics: aws, devops, docker, ec2, kubernetes, nextjs, nodejs, postgresql, tailwindcss, terraform, typescript. The README below documents the project; use the table above for a quick overview.
+
+### Global references
+
+<div align="center">
+
+🇮🇸 Iceland &middot; 🇳🇿 New Zealand &middot; 🇨🇭 Switzerland &middot; 🇸🇮 Slovenia &middot; 🇮🇪 Ireland &middot; 🇦🇹 Austria &middot; 🇵🇹 Portugal &middot; 🇸🇬 Singapore &middot; 🇫🇮 Finland
+
+</div>
+
+---
+
 <!-- dbx-style-kit -->
 <div align="center">
 

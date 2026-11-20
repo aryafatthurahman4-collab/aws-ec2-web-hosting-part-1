@@ -1074,3 +1074,28 @@ Materi Part 2 melengkapi Part 1:
 </div>
 
 <sub>Connection names shown in the DBX sidebar - decorative reference badges.</sub>
+
+---
+
+## Master Guide & References (Lengkap)
+
+Semua materi cloud/DevOps/frontend/database yang dipakai lab ini, dikumpulkan di satu tempat:
+
+| Doc | Isi |
+| --- | --- |
+| [16 â€” EC2 Backend Deployment Guide](docs/16-ec2-backend-deployment-guide.md) | NestJS/Next.js/Express â†’ Docker multi-stage, GHCR/ECR, GitHub Actions, Tailscale, monitoring, rollback, cleanup, troubleshooting, checklist |
+| [17 â€” WSL2 Ubuntu â†’ IP Publik](docs/17-wsl2-ubuntu-public-ip-setup.md) | Terraform EC2 + Elastic IP, login SSH, install Docker, akses via IP publik (bukan localhost), PuTTY, troubleshooting |
+| [Script â€” deploy_ec2_public_ip.sh](scripts/deploy_ec2_public_ip.sh) | All-in-one: WSL2 â†’ AWS EC2 + EIP + Docker + container nginx |
+| [18 â€” Job Descriptions](docs/18-job-descriptions.md) | DevOps, Backend/Fullstack, QA Banking, Java Quarkus + C# .NET + pemetaan ke lab |
+| [19 â€” Shadcn UI + Tailwind + Next.js](docs/19-shadcn-tailwind-nextjs-references.md) | Instalasi Tailwind v3/v4, shadcn/ui, blocks, dark mode, best practice, referensi |
+| [20 â€” 26 Database & Engine](docs/20-database-landscape-26.md) | SQL terdistribusi, cloud analytics, NoSQL, vector/graph, streaming/time-series |
+| [21 â€” Master Reference Links](docs/21-master-reference-links.md) | Video, repo GitHub, artikel, dokumentasi resmi, roadmap, urutan belajar |
+
+### Urutan belajar cepat
+
+```text
+Linux -> Git/GitHub -> Cloud Fundamentals -> AWS -> Docker -> Kubernetes
+-> Terraform -> CI/CD -> Monitoring -> DNS + HTTPS -> Optimasi biaya & security
+```
+
+**Prinsip:** jangan deploy aplikasi yang belum jalan di localhost, dan jangan buka port 3000 langsung ke internet â€” gunakan Nginx + HTTPS.

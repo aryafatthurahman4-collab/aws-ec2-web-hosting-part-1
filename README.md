@@ -1,3 +1,13 @@
+# Aws-Ec2-Web-Hosting-Part-1
+<sub><span style="opacity: 0.85">AWS EC2 Web Hosting Lab - Next.js 16, Tailwind, PostgreSQL, Docker, Terraform, Kubernetes/Helm.</span></sub>
+<div align="center" style="font-size: 0.9em">
+<img src="assets/brand-logo.svg" alt="Arya Fatthurahman" width="130px" />
+</div>
+
+[![CI](https://github.com/devarent/aws-ec2-web-hosting-part-1/actions/workflows/ci.yml/badge.svg)](https://github.com/devarent/aws-ec2-web-hosting-part-1/actions/workflows/ci.yml)
+
+---
+
 
 <!-- identity-block -->
 <div align="center">
@@ -1013,3 +1023,9 @@ Materi Part 2 melengkapi Part 1:
 <div align="center">
 <sub>Hands-on engineering, built and documented in the open.</sub>
 </div>
+## Quickstart
+
+```bash
+cd <repo>
+# Setup instructions are in the project sections above.
+```
